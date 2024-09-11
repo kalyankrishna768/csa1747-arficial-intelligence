@@ -1,0 +1,73 @@
+from collections import deque
+
+class State:
+    def __init__(self, missionaries, cannibals, boat_position, boat_capacity):
+        self.missionaries = missionaries
+        self.cannibals = cannibals
+        self.boat_position = boat_position
+        self.boat_capacity = boat_capacity
+
+    def is_valid(self):
+        if self.missionaries < 0 or self.cannibals < 0 or self.missionaries > initial_missionaries or self.cannibals > initial_cannibals:
+            return False
+        if self.missionaries > 0 and self.missionaries < self.cannibals:
+            return False
+        if self.missionaries < initial_missionaries and (initial_missionaries - self.missionaries) < (initial_cannibals - self.cannibals):
+            return False
+        return True
+
+    def __eq__(self, other):
+        return self.missionaries == other.missionaries and self.cannibals == other.cannibals and self.boat_position == other.boat_position
+
+    def __hash__(self):
+        return hash((self.missionaries, self.cannibals, self.boat_position))
+
+def get_neighbors(state):
+    neighbors = []
+    for m in range(state.boat_capacity + 1):
+        for c in range(state.boat_capacity + 1):
+            if m + c > 0 and m + c <= state.boat_capacity:
+                if state.boat_position == 'left':
+                    new_state = State(state.missionaries - m, state.cannibals - c, 'right', state.boat_capacity)
+                else:
+                    new_state = State(state.missionaries + m, state.cannibals + c, 'left', state.boat_capacity)
+                if new_state.is_valid():
+                    neighbors.append(new_state)
+    return neighbors
+
+def bfs_missionaries_and_cannibals(initial_state):
+    if initial_state == State(0, 0, 'right', initial_state.boat_capacity):
+        return [initial_state]
+    queue = deque([[initial_state]])
+    visited = set([initial_state])
+    while queue:
+        path = queue.popleft()
+        current_state = path[-1]
+        for next_state in get_neighbors(current_state):
+            if next_state not in visited:
+                if next_state == State(0, 0, 'right', next_state.boat_capacity):
+                    return path + [next_state]
+                visited.add(next_state)
+                queue.append(path + [next_state])
+    return None
+
+def print_solution(solution):
+    if solution is None:
+        print("No solution found")
+    else:
+        for state in solution:
+            print(f"Left: {state.missionaries} missionaries, {state.cannibals} cannibals | Boat: {state.boat_position}")
+        print("Missionaries and cannibals have successfully crossed the river!")
+
+def main():
+    global initial_missionaries, initial_cannibals
+    initial_missionaries = int(input("Enter the number of missionaries: "))
+    initial_cannibals = int(input("Enter the number of cannibals: "))
+    boat_capacity = int(input("Enter the boat capacity: "))
+
+    initial_state = State(initial_missionaries, initial_cannibals, 'left', boat_capacity)
+    solution = bfs_missionaries_and_cannibals(initial_state)
+    print_solution(solution)
+
+if __name__ == "__main__":
+    main()

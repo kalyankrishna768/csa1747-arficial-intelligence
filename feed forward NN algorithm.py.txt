@@ -1,0 +1,46 @@
+import numpy as np
+
+class NeuralNetwork:
+    def __init__(self, input_size, hidden_size, output_size):
+        # Initialize weights and biases
+        self.weights1 = np.random.randn(input_size, hidden_size)  # weights of the hidden layer
+        self.bias1 = np.zeros((1, hidden_size))  # bias of the hidden layer
+        self.weights2 = np.random.randn(hidden_size, output_size)  # weights of the output layer
+        self.bias2 = np.zeros((1, output_size))  # bias of the output layer
+    
+    def sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))
+    
+    def forward(self, X):
+        # Forward propagation
+        # Input to hidden layer
+        self.hidden_layer_input = np.dot(X, self.weights1) + self.bias1
+        self.hidden_layer_activation = self.sigmoid(self.hidden_layer_input)
+        
+        # Hidden layer to output layer
+        self.output_layer_input = np.dot(self.hidden_layer_activation, self.weights2) + self.bias2
+        self.output = self.sigmoid(self.output_layer_input)
+        
+        return self.output
+
+# Example usage:
+if __name__ == '__main__':
+    # Example dataset (input features)
+    X = np.array([[0, 0],
+                  [0, 1],
+                  [1, 0],
+                  [1, 1]])
+    
+    # Example dataset (expected outputs)
+    y = np.array([[0], [1], [1], [0]])
+    
+    # Define neural network
+    input_size = 2
+    hidden_size = 4
+    output_size = 1
+    neural_net = NeuralNetwork(input_size, hidden_size, output_size)
+    
+    # Perform forward pass
+    output = neural_net.forward(X)
+    print("Predicted output:")
+    print(output)

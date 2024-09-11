@@ -1,0 +1,47 @@
+def is_valid_color(node, color, colors, graph):
+    """ Check if it's valid to color a node with the given color. """
+    for neighbor in graph[node]:
+        if colors[neighbor] == color:
+            return False
+    return True
+
+def map_coloring(graph, colors, node_list, num_colors):
+    """ Solve the map coloring problem using backtracking. """
+    if not node_list:
+        return True
+
+    node = node_list[0]
+    for color in range(num_colors):
+        if is_valid_color(node, color, colors, graph):
+            colors[node] = color
+            if map_coloring(graph, colors, node_list[1:], num_colors):
+                return True
+            colors[node] = -1  # Reset color
+
+    return False
+
+def print_solution(colors):
+    """ Print the solution. """
+    for node, color in colors.items():
+        print(f"Node {node} -> Color {color}")
+
+# Example usage
+# Define the graph as an adjacency list
+graph = {
+    'A': ['B', 'C', 'D'],
+    'B': ['A', 'C', 'E'],
+    'C': ['A', 'B', 'F'],
+    'D': ['A', 'E'],
+    'E': ['B', 'D', 'F'],
+    'F': ['C', 'E']
+}
+
+num_colors = 3  # Number of colors to use
+colors = {node: -1 for node in graph}  # -1 means uncolored
+node_list = list(graph.keys())
+
+if map_coloring(graph, colors, node_list, num_colors):
+    print("Solution found:")
+    print_solution(colors)
+else:
+    print("No solution found")

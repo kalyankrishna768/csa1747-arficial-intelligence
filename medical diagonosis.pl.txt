@@ -1,0 +1,35 @@
+% Facts about symptoms and diseases
+disease(flu, [fever, cough, sore_throat, runny_nose]).
+disease(cold, [cough, runny_nose, sneezing]).
+disease(allergy, [sneezing, itchy_eyes, runny_nose]).
+disease(pneumonia, [fever, cough, difficulty_breathing]).
+
+% Rule to diagnose a disease based on symptoms
+diagnose(Disease, Symptoms) :-
+    disease(Disease, DiseaseSymptoms),
+    subset(Symptoms, DiseaseSymptoms).
+
+% Helper predicate to check if all elements of a list are in another list
+subset([], _).
+subset([X|Xs], List) :-
+    member(X, List),
+    subset(Xs, List).
+
+% Entry point for interactive diagnosis
+start :-
+    write('Enter your symptoms separated by commas (e.g., fever, cough): '),
+    read_line_to_string(user_input, Input),
+    split_string(Input, ", ", ",", SymptomStrings),
+    maplist(atom_string, Symptoms, SymptomStrings),
+    diagnose(Symptoms, Diseases),
+    (   Diseases = [] 
+    ->  write('No matching diseases found.'), nl
+    ;   write('Possible diseases based on the symptoms:'), nl,
+        print_diseases(Diseases)
+    ).
+
+% Print the list of diagnosed diseases
+print_diseases([]).
+print_diseases([H|T]) :-
+    write('- '), write(H), nl,
+    print_diseases(T).

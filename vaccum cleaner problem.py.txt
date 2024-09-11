@@ -1,0 +1,51 @@
+class VacuumCleaner:
+    def __init__(self, environment):
+        self.environment = environment
+        self.position = (0, 0)  # Start at the first room (0,0)
+        self.cleaned_rooms = []
+
+    def is_dirty(self, position):
+        return self.environment[position[0]][position[1]] == 1
+
+    def clean(self, position):
+        if self.is_dirty(position):
+            self.environment[position[0]][position[1]] = 0
+            self.cleaned_rooms.append(position)
+            print(f"Cleaned room at position {position}")
+
+    def move(self):
+        rows = len(self.environment)
+        cols = len(self.environment[0])
+        for i in range(rows):
+            for j in range(cols):
+                self.position = (i, j)
+                if self.is_dirty(self.position):
+                    self.clean(self.position)
+                else:
+                    print(f"Room at position {self.position} is already clean")
+
+    def print_environment(self):
+        print("Environment state:")
+        for row in self.environment:
+            print(row)
+
+def main():
+    # Take input for the environment (grid) size
+    rows = int(input("Enter the number of rows in the environment: "))
+    cols = int(input("Enter the number of columns in the environment: "))
+
+    # Initialize the environment grid
+    environment = []
+    for i in range(rows):
+        row = list(map(int, input(f"Enter the state of row {i} (0 for clean, 1 for dirty): ").split()))
+        environment.append(row)
+
+    vacuum = VacuumCleaner(environment)
+    print("Initial environment state:")
+    vacuum.print_environment()
+    vacuum.move()
+    print("Final environment state:")
+    vacuum.print_environment()
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,27 @@
+% Initial state: monkey starts at floor, has no banana, and no boxes are stacked
+at(floor, monkey).
+at(ceiling, banana).
+stacked(box1, floor).
+
+% Actions definition: define actions available to the monkey
+action(grab, [monkey, banana], [has(banana)]).
+action(climb, [monkey, floor, box1], [at(ceiling, monkey)]).
+action(push(Box), [monkey, floor], [stacked(Box, floor)]).
+
+% Rules: define possible states and how actions change them
+possible(State, [Action|Rest]) :-
+    action(Action, Preconditions, Effects),
+    subset(Preconditions, State),           % Check if all Preconditions are satisfied
+    subtract(State, Preconditions, Remain), % Determine remaining State after taking Action
+    union(Remain, Effects, NewState),       % Calculate new State after taking Action
+    possible(NewState, Rest).
+
+% Utility predicate to check subset
+subset([], _).
+subset([H|T], Set) :-
+    member(H, Set),
+    subset(T, Set).
+
+% Example Query:
+% Query to find a sequence of actions to reach the banana
+% ?- possible([at(floor, monkey), stacked(box1, floor)], Plan).

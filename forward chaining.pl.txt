@@ -1,0 +1,35 @@
+% Facts about family relationships
+parent(john, mary).   % John is a parent of Mary
+parent(mary, alice).  % Mary is a parent of Alice
+parent(john, bob).    % John is a parent of Bob
+
+% Rules to infer relationships
+
+% A person is a grandparent if they are a parent of a parent
+grandparent(Grandparent, Grandchild) :-
+    parent(Grandparent, Parent),
+    parent(Parent, Grandchild).
+
+% A person is an ancestor if they are a parent of someone who is an ancestor
+ancestor(Ancestor, Descendant) :-
+    parent(Ancestor, Descendant).
+ancestor(Ancestor, Descendant) :-
+    parent(Ancestor, Intermediate),
+    ancestor(Intermediate, Descendant).
+
+% A person is a sibling if they have the same parent
+sibling(Person1, Person2) :-
+    parent(Parent, Person1),
+    parent(Parent, Person2),
+    Person1 \= Person2.
+
+% Queries
+
+% To find grandparents of a person:
+% ?- grandparent(Grandparent, alice).
+
+% To find ancestors of a person:
+% ?- ancestor(Ancestor, alice).
+
+% To find siblings of a person:
+% ?- sibling(mary, Sibling).

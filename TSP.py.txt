@@ -1,0 +1,42 @@
+import itertools
+
+# Function to calculate the total distance of a given tour
+def calculate_total_distance(tour, distance_matrix):
+    total_distance = 0
+    number_of_cities = len(tour)
+    for i in range(number_of_cities):
+        total_distance += distance_matrix[tour[i]][tour[(i + 1) % number_of_cities]]
+    return total_distance
+
+# Function to solve the Travelling Salesman Problem
+def travelling_salesman_problem(distance_matrix):
+    number_of_cities = len(distance_matrix)
+    cities = list(range(number_of_cities))
+    
+    # Generate all possible tours
+    all_possible_tours = itertools.permutations(cities)
+    
+    # Initialize the minimum distance to a large value
+    min_distance = float('inf')
+    best_tour = None
+    
+    # Evaluate each tour
+    for tour in all_possible_tours:
+        current_distance = calculate_total_distance(tour, distance_matrix)
+        if current_distance < min_distance:
+            min_distance = current_distance
+            best_tour = tour
+    
+    return best_tour, min_distance
+
+# Example usage
+distance_matrix = [
+    [0, 10, 15, 20],
+    [10, 0, 35, 25],
+    [15, 35, 0, 30],
+    [20, 25, 30, 0]
+]
+
+best_tour, min_distance = travelling_salesman_problem(distance_matrix)
+print(f"Best tour: {best_tour}")
+print(f"Minimum distance: {min_distance}")

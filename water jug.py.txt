@@ -1,0 +1,51 @@
+from collections import deque
+
+def is_target_reached(x, y, target, final_jug):
+    if final_jug == 1:
+        return x == target and y == 0
+    elif final_jug == 2:
+        return y == target and x == 0
+    return False
+
+def bfs_jug_problem(capacity1, capacity2, target, final_jug):
+    visited = set()
+    queue = deque([(0, 0)])  # Initial state with both jugs empty
+    steps = []
+
+    while queue:
+        x, y = queue.popleft()
+
+        if (x, y) in visited:
+            continue
+        visited.add((x, y))
+        steps.append((x, y))
+
+        if is_target_reached(x, y, target, final_jug):
+            return steps
+
+        queue.append((capacity1, y))  # Fill Jug1
+        queue.append((x, capacity2))  # Fill Jug2
+        queue.append((0, y))          # Empty Jug1
+        queue.append((x, 0))          # Empty Jug2
+        queue.append((min(x + y, capacity1), max(0, x + y - capacity1)))  # Pour Jug2 into Jug1
+        queue.append((max(0, x + y - capacity2), min(x + y, capacity2)))  # Pour Jug1 into Jug2
+
+    return []
+
+def main():
+    capacity1 = int(input("Enter capacity of Jug1: "))
+    capacity2 = int(input("Enter capacity of Jug2: "))
+    target = int(input("Enter the target amount of water: "))
+    final_jug = int(input("Enter which jug should have the final amount of water (1 or 2): "))
+
+    solution = bfs_jug_problem(capacity1, capacity2, target, final_jug)
+    
+    if solution:
+        print("Steps to reach the target:")
+        for step in solution:
+            print(step)
+    else:
+        print("No solution found")
+
+if __name__ == "__main__":
+    main()
