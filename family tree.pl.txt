@@ -1,0 +1,36 @@
+% Facts: Define family relationships
+parent(bob, alice).
+parent(bob, jack).
+parent(alice, claire).
+parent(alice, jacob).
+parent(jack, emily).
+parent(jack, lucas).
+
+% Rules: Define sibling relationship
+sibling(X, Y) :-
+    parent(Z, X),
+    parent(Z, Y),
+    X \= Y.
+
+% Rules: Define ancestor relationship
+ancestor(X, Y) :-
+    parent(X, Y).
+ancestor(X, Y) :-
+    parent(X, Z),
+    ancestor(Z, Y).
+
+% Example Queries:
+% 1. Querying parent-child relationship:
+% ?- parent(bob, alice).
+%
+% 2. Querying sibling relationship:
+% ?- sibling(jack, claire).
+%
+% 3. Finding all siblings:
+% ?- sibling(X, Y).
+%
+% 4. Querying ancestor relationship:
+% ?- ancestor(bob, emily).
+%
+% 5. Finding all ancestors:
+% ?- ancestor(X, emily).

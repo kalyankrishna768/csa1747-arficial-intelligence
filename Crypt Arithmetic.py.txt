@@ -1,0 +1,34 @@
+from itertools import permutations
+
+def is_valid_solution(solution, words, result):
+    char_to_digit = {char: digit for char, digit in zip(solution[0], solution[1])}
+    if char_to_digit[words[0][0]] == 0 or char_to_digit[words[1][0]] == 0 or char_to_digit[result[0]] == 0:
+        return False
+    word_values = [int(''.join(str(char_to_digit[char]) for char in word)) for word in words]
+    result_value = int(''.join(str(char_to_digit[char]) for char in result))
+    return sum(word_values) == result_value
+
+def solve_cryptarithmetic(words, result):
+    unique_chars = set(''.join(words) + result)
+    if len(unique_chars) > 10:
+        return "No solution"
+    for perm in permutations(range(10), len(unique_chars)):
+        solution = (unique_chars, perm)
+        if is_valid_solution(solution, words, result):
+            char_to_digit = {char: digit for char, digit in zip(unique_chars, perm)}
+            return {char: char_to_digit[char] for char in unique_chars}
+    return "No solution"
+
+def main():
+    words = ["SEND", "MORE"]
+    result = "MONEY"
+    solution = solve_cryptarithmetic(words, result)
+    if solution != "No solution":
+        print("Solution found:")
+        for char, digit in solution.items():
+            print(f"{char}: {digit}")
+    else:
+        print(solution)
+
+if __name__ == "__main__":
+    main()

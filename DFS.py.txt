@@ -1,0 +1,38 @@
+def dfs(graph, start_node):
+    visited = set()  # Set to keep track of visited nodes
+    stack = [start_node]  # Stack for DFS, initialized with the start node
+    dfs_order = []  # List to store the order of visited nodes
+
+    while stack:
+        current_node = stack.pop()  # Pop a node from the top of the stack
+        if current_node not in visited:
+            visited.add(current_node)  # Mark the node as visited
+            dfs_order.append(current_node)  # Add the node to the DFS order list
+            # Add all adjacent unvisited nodes to the stack
+            for neighbor in reversed(graph[current_node]):
+                if neighbor not in visited:
+                    stack.append(neighbor)
+
+    return dfs_order
+
+def main():
+    # Example graph as an adjacency list
+    graph = {
+        'A': ['B', 'C'],
+        'B': ['A', 'D', 'E'],
+        'C': ['A', 'F'],
+        'D': ['B'],
+        'E': ['B', 'F'],
+        'F': ['C', 'E']
+    }
+
+    start_node = input("Enter the start node: ").strip().upper()
+    
+    if start_node in graph:
+        dfs_result = dfs(graph, start_node)
+        print(f"DFS Order starting from node {start_node}: {dfs_result}")
+    else:
+        print(f"Node {start_node} is not in the graph.")
+
+if __name__ == "__main__":
+    main()

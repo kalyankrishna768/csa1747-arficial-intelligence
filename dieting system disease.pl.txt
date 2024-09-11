@@ -1,0 +1,17 @@
+% Facts: Define diet suggestions based on disease
+diet_suggestion(diabetes, 'Low-carb diet with controlled sugar intake. Increase fiber intake.').
+diet_suggestion(hypertension, 'Low-sodium diet. Increase potassium-rich foods. Limit alcohol and caffeine intake.').
+
+% Rules: Define predicate to suggest diet based on disease
+suggest_diet(Disease, Suggestion) :-
+    diet_suggestion(Disease, Suggestion).
+
+% Example Queries:
+% 1. Querying diet suggestion for diabetes:
+% ?- suggest_diet(diabetes, Suggestion).
+%
+% 2. Querying diet suggestion for hypertension:
+% ?- suggest_diet(hypertension, Suggestion).
+%
+% 3. Querying diet suggestion for an unknown disease:
+% ?- suggest_diet(asthma, Suggestion).
