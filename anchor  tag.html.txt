@@ -1,0 +1,14 @@
+<!-- Title Tag Example -->
+<h1>Welcome to My Blog</h1>
+<p>This is a sample blog post to demonstrate HTML elements.</p>
+
+<!-- Anchor Tag Example -->
+<p>Check out my <a href="https://www.example.com" target="_blank" title="Visit Example Website">favorite website</a> for more information.</p>
+
+<!-- Additional HTML Content -->
+<h2>Related Posts</h2>
+<ul>
+    <li><a href="http://yourdomain.com/post-1" title="Read Post 1">Post 1</a></li>
+    <li><a href="http://yourdomain.com/post-2" title="Read Post 2">Post 2</a></li>
+    <li><a href="http://yourdomain.com/post-3" title="Read Post 3">Post 3</a></li>
+</ul>

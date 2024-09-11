@@ -1,0 +1,26 @@
+% Facts: Define which birds can fly.
+can_fly(sparrow).
+can_fly(eagle).
+can_fly(albatross).
+
+% Rules: Define which birds cannot fly.
+cannot_fly(penguin).
+cannot_fly(ostrich).
+cannot_fly(kiwi).
+
+% Rules: Define predicate to check if a bird can fly.
+bird_can_fly(Bird) :- can_fly(Bird).
+bird_can_fly(Bird) :- \+ cannot_fly(Bird).
+
+% Example Queries:
+% 1. Querying if sparrow can fly:
+% ?- bird_can_fly(sparrow).
+%
+% 2. Querying if penguin can fly:
+% ?- bird_can_fly(penguin).
+%
+% 3. Listing all birds that can fly:
+% ?- can_fly(Bird).
+%
+% 4. Listing all birds and whether they can fly:
+% ?- bird_can_fly(Bird).

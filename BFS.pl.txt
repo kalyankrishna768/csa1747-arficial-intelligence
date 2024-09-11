@@ -1,0 +1,41 @@
+% Define the graph using edges.
+edge(a, b, 1).
+edge(a, c, 4).
+edge(b, d, 2).
+edge(c, d, 5).
+edge(d, e, 1).
+
+% Define heuristic values for nodes. These should be estimates of the cost to reach the goal from the node.
+heuristic(a, 7).
+heuristic(b, 6).
+heuristic(c, 4).
+heuristic(d, 1).
+heuristic(e, 0).
+
+% Best First Search algorithm
+best_first_search(Start, Goal, Path) :-
+    best_first_search([Start], Goal, [], Path).
+
+% Base case: goal reached
+best_first_search([Goal|Rest], Goal, Visited, [Goal|Rest]) :-
+    !.  % Cut to prevent backtracking
+
+% Recursive case
+best_first_search(OpenList, Goal, Visited, Path) :-
+    OpenList = [Current|Rest],
+    findall([Next, Cost], (edge(Current, Next, Cost), \+ member(Next, Visited)), Neighbors),
+    sort(2, @=<, Neighbors, SortedNeighbors),  % Sort neighbors by cost
+    select([Next, _], SortedNeighbors, _),
+    \+ member(Next, Visited),  % Ensure not to revisit nodes
+    best_first_search([Next|OpenList], Goal, [Current|Visited], Path).
+
+% Helper predicate to sort and select the best node to expand
+select_best_node(OpenList, Next, Rest) :-
+    findall([Node, Cost], (member(Node, OpenList), heuristic(Node, Cost)), NodesWithCost),
+    sort(2, @=<, NodesWithCost, Sorted),
+    Sorted = [[Next, _]|RestNodes],
+    exclude(=(Next), OpenList, Rest).
+
+% Entry point for Best First Search
+search(Start, Goal, Path) :-
+    best_first_search([Start], Goal, [], Path).
